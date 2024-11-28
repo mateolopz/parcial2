@@ -30,17 +30,16 @@ export class UsuarioService {
     }
 
     async eliminarUsuario(id: string) {
-        const profesor: UsuarioEntity = await this.usuarioRepository.findOne({where:{id},relations: ['propuestas']});
-        if (!profesor)
-          throw new BusinessLogicException("The museum with the given id was not found", BusinessError.NOT_FOUND);
-        else if(profesor.propuestas.length > 0){
-            for (let i = 0; i < profesor.propuestas.length; i++) {
-                if(profesor.propuestas[i].proyecto != null){
-                    throw new BusinessLogicException("The professor has a proposal with a project", BusinessError.NOT_FOUND);
-                }
+        const usuario: UsuarioEntity = await this.usuarioRepository.findOne({where:{id},relations: ["bonos", "clases"]});
+        if (!usuario)
+          throw new BusinessLogicException("The user with the given id was not found", BusinessError.NOT_FOUND);
+        else if(usuario.bonos.length > 0){
+            throw new BusinessLogicException("The user has associated bonuses", BusinessError.PRECONDITION_FAILED);
             }
-        }
-        await this.profesorRepository.remove(profesor);
+        else if(usuario.rol === "Decana"){
+            throw new BusinessLogicException("The user is a dean", BusinessError.PRECONDITION_FAILED);
+            }
+        await this.usuarioRepository.remove(usuario);
     }
 
 }
