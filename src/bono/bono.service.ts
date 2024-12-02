@@ -28,7 +28,7 @@ export class BonoService {
 
     async findAllBonosByUsuario(userID: string): Promise<BonoEntity[]> {
         const bono: BonoEntity[] = await this.bonoRepository.find({where: {usuario:{id:userID}}, relations: ["usuario", "clase"] } );
-        if (!bono)
+        if (bono.length === 0 || !bono)
           throw new BusinessLogicException("The bonus with the given id was not found", BusinessError.NOT_FOUND);
     
         return bono;

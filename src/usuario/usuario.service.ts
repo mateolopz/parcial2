@@ -12,7 +12,7 @@ export class UsuarioService {
     ){}
 
     async crearUsuario(usuario: UsuarioEntity): Promise<UsuarioEntity> {
-        if (usuario.rol === "Profesor" && usuario.grupoDeInvestigacion in ["TICSW","IMAGINE","COMIT"]) {
+        if (usuario.rol === "Profesor" && ["TICSW", "IMAGINE", "COMIT"].includes(usuario.grupoDeInvestigacion)) {
             return await this.usuarioRepository.save(usuario);
         }
         else if(usuario.rol === "Decana" && usuario.numeroExtension.toString().length === 8){
